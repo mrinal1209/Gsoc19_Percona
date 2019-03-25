@@ -23,7 +23,9 @@
       '7d',
       '30d',
     ],
+    hidden=true,
   ):: {
+    hidden: hidden,
     refresh_intervals: refresh_intervals,
     time_options: time_options,
   },

@@ -16,4 +16,5 @@
   alertCondition:: import 'alert_condition.libsonnet',
   cloudwatch:: import 'cloudwatch.libsonnet',
   elasticsearch:: import 'elasticsearch.libsonnet',
+  pmm:: import 'pmm_remote_instances_panel.libsonnet',
 }
