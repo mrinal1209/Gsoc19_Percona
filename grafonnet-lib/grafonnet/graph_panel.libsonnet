@@ -45,7 +45,6 @@
    */
   new(
     title,
-    span=null,
     fill=1,
     linewidth=1,
     decimals=null,
@@ -67,7 +66,6 @@
     nullPointMode='null',
     dashes=false,
     stack=false,
-    repeat=null,
     repeatDirection=null,
     sort=0,
     show_xaxis=true,
@@ -89,10 +87,13 @@
     logBase1Y=1,
     logBase2Y=1,
     transparent=false,
-    value_type='individual'
+    value_type='individual',
+    interval=null,
+    paceLength=null,
   ):: {
+    paceLength: paceLength,
+    interval: interval,
     title: title,
-    [if span != null then 'span']: span,
     [if min_span != null then 'minSpan']: min_span,
     type: 'graph',
     datasource: datasource,
@@ -102,8 +103,8 @@
     [if height != null then 'height']: height,
     renderer: 'flot',
     yaxes: [
-      self.yaxe(if formatY1 != null then formatY1 else format, min, max, decimals=decimals, logBase=logBase1Y),
-      self.yaxe(if formatY2 != null then formatY2 else format, min, max, decimals=decimals, logBase=logBase2Y),
+      self.yaxe(if formatY1 != null then formatY1 else format, min, max,logBase=logBase1Y),
+      self.yaxe(if formatY2 != null then formatY2 else format, min, max,logBase=logBase2Y),
     ],
     xaxis: {
       show: show_xaxis,
@@ -111,6 +112,10 @@
       name: null,
       values: if x_axis_mode == 'series' then [x_axis_values] else [],
       buckets: null,
+    },
+    yaxis: {
+    align:false,
+    alignLevel:null,
     },
     lines: lines,
     fill: fill,
@@ -130,8 +135,6 @@
       max: legend_max,
       current: legend_current,
       total: legend_total,
-      alignAsTable: legend_alignAsTable,
-      rightSide: legend_rightSide,
       avg: legend_avg,
       [if legend_hideEmpty != null then 'hideEmpty']: legend_hideEmpty,
       [if legend_hideZero != null then 'hideZero']: legend_hideZero,
@@ -146,22 +149,21 @@
       sort: if sort == 'decreasing' then 2 else if sort == 'increasing' then 1 else sort,
     },
     timeFrom: null,
+    timeRegions: [],
     timeShift: null,
     [if transparent == true then 'transparent']: transparent,
     aliasColors: aliasColors,
-    repeat: repeat,
     [if repeatDirection != null then 'repeatDirection']: repeatDirection,
     seriesOverrides: [],
     thresholds: thresholds,
     links: [],
     yaxe(
-      format='short',
+      format='s',
       min=null,
       max=null,
       label=null,
       show=true,
       logBase=1,
-      decimals=null,
     ):: {
       label: label,
       show: show,
@@ -169,7 +171,6 @@
       min: min,
       max: max,
       format: format,
-      [if decimals != null then 'decimals']: decimals,
     },
     _nextTarget:: 0,
     addTarget(target):: self {
@@ -198,11 +199,10 @@
       label=null,
       show=true,
       logBase=1,
-      decimals=null,
     ):: self {
       local nextYaxis = super._nextYaxis,
       _nextYaxis: nextYaxis + 1,
-      yaxes+: [self.yaxe(format, min, max, label, show, logBase, decimals)],
+      yaxes+: [self.yaxe(format, min, max, label, show, logBase)],
     },
     addAlert(
       name,

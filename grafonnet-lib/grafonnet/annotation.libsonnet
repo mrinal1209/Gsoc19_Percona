@@ -16,7 +16,6 @@
     enable=true,
     hide=false,
     iconColor='rgba(255, 96, 96, 1)',
-    tags=[],
     type='tags',
     builtIn=null,
   )::
@@ -27,8 +26,6 @@
       hide: hide,
       iconColor: iconColor,
       name: name,
-      showIn: 0,
-      tags: tags,
       type: type,
       [if builtIn != null then 'builtIn']: builtIn,
     },

@@ -8,14 +8,14 @@ local timepickerlib = import 'timepicker.libsonnet';
     tags=[],
     time_from='now-6h',
     time_to='now',
-    timezone='browser',
-    refresh='',
+    timezone='',
     timepicker=timepickerlib.new(),
     graphTooltip='default',
-    hideControls=false,
     schemaVersion=14,
     uid='',
     description=null,
+    id=null,
+    version=null,
   ):: {
     local it = self,
     _annotations:: [],
@@ -28,12 +28,9 @@ local timepickerlib = import 'timepicker.libsonnet';
       else if graphTooltip == 'shared_crosshair' then 1
       else if graphTooltip == 'default' then 0
       else graphTooltip,
-    hideControls: hideControls,
-    id: null,
+    id: id,
     links: [],
     panels:: [],
-    refresh: refresh,
-    rows: [],
     schemaVersion: schemaVersion,
     style: style,
     tags: tags,
@@ -44,7 +41,7 @@ local timepickerlib = import 'timepicker.libsonnet';
     timezone: timezone,
     timepicker: timepicker,
     title: title,
-    version: 0,
+    version: version,
     addAnnotation(annotation):: self {
       _annotations+:: [annotation],
     },
@@ -116,30 +113,6 @@ local timepickerlib = import 'timepicker.libsonnet';
     addRows(rows):: std.foldl(function(d, row) d.addRow(row), rows, self),
     addLink(link):: self {
       links+: [link],
-    },
-    required:: [],
-    __requires: it.required,
-    addRequired(type, name, id, version):: self {
-      required+: [{type: type, name: name, id: id, version: version},],
-    },
-    inputs:: [],
-    __inputs: it.inputs,
-    addInput(
-      name,
-      label,
-      type,
-      pluginId,
-      pluginName,
-      description='',
-    ):: self {
-      inputs+: [{
-        name: name,
-        label: label,
-        type: type,
-        pluginId: pluginId,
-        pluginName: pluginName,
-        description: description,
-      }],
     },
   },
 }
